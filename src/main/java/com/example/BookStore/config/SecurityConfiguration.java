@@ -2,7 +2,10 @@ package com.example.BookStore.config;
 
 import com.example.BookStore.entity.Role;
 import com.example.BookStore.service.UserService;
+import com.example.BookStore.serviceImpl.UserServiceImpl;
+import com.example.BookStore.serviceImpl.userDetailsImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,6 +16,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -24,7 +28,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfiguration {
 
     private final JWTAuthenticationFilter jwtAuthenticationFilter;
-    private final UserService userService;
+    @Autowired
+    private final UserServiceImpl userService;
+
+    @Autowired
+    private final userDetailsImpl userDetails;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -45,7 +53,8 @@ public class SecurityConfiguration {
     @Bean
     public AuthenticationProvider authenticationProvider(){
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-        authenticationProvider.setUserDetailsService(userService.userDetailsService());
+        String email = userDetails.getEmail();
+        authenticationProvider.setUserDetailsService((UserDetailsService) userService.userDetailsService(email));
         authenticationProvider.setPasswordEncoder(passwordEncoder());
         return authenticationProvider;
     }

@@ -35,6 +35,5 @@ public class OrderController {
         Order order = orderService.createOrderFromCart(user);
         return ResponseEntity.ok(order);
     }
-}
 
 }

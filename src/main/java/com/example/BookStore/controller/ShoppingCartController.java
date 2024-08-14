@@ -34,7 +34,7 @@ public class ShoppingCartController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         User user;
-        user = userService.userDetailsService(String email);
+        user = userService.userDetailsService(email);
 
         Book book = bookService.findById(bookId);
         ShoppingCart shoppingCart = shoppingCartService.addToCart(user, book, quantity);
@@ -45,7 +45,7 @@ public class ShoppingCartController {
     public ResponseEntity<ShoppingCart> viewCart() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
-        User user = userService.userDetailsService(String email);
+        User user = userService.userDetailsService( email);
 
         ShoppingCart shoppingCart = shoppingCartService.getCartByUser(user);
         return ResponseEntity.ok(shoppingCart);

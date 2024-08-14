@@ -1,7 +1,9 @@
 package com.example.BookStore.config;
 
+import com.example.BookStore.entity.User;
 import com.example.BookStore.service.JWTService;
 import com.example.BookStore.service.UserService;
+import com.example.BookStore.serviceImpl.UserServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,7 +24,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JWTAuthenticationFilter extends OncePerRequestFilter {
     private final JWTService jwtService;
-    private final UserService userService;
+    private final UserServiceImpl userService;
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         final String authHeader = request.getHeader("Authorization");
@@ -35,7 +37,8 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
         jwt = authHeader.substring(7);
         userEmail = jwtService.extractUserName(jwt);
             if(userEmail!=null && SecurityContextHolder.getContext().getAuthentication()== null){
-                UserDetails userDetails = userService.userDetailsService().loadUserByUsername(userEmail);
+                User user = userService.userDetailsService(userEmail);
+                UserDetails userDetails = (UserDetails)user;
                 if(jwtService.isTokenValid(jwt, userDetails)){
                     SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
 

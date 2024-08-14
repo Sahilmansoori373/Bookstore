@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.Set;
 @Data
 @Entity
+@Table(name = "`order`")
 public class Order {
 
         @Id
