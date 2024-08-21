@@ -2,13 +2,14 @@ package com.example.BookStore.config;
 
 import com.example.BookStore.entity.User;
 import com.example.BookStore.service.JWTService;
-import com.example.BookStore.service.UserService;
-import com.example.BookStore.serviceImpl.UserServiceImpl;
+import com.example.BookStore.serviceImpl.UserDetailsServiceImpl;
+import com.example.BookStore.serviceImpl.UserDetailsServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,8 +24,10 @@ import java.io.IOException;
 @Component
 @RequiredArgsConstructor
 public class JWTAuthenticationFilter extends OncePerRequestFilter {
+    @Autowired
     private final JWTService jwtService;
-    private final UserServiceImpl userService;
+    @Autowired
+    private final UserDetailsServiceImpl userService;
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         final String authHeader = request.getHeader("Authorization");
@@ -37,7 +40,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
         jwt = authHeader.substring(7);
         userEmail = jwtService.extractUserName(jwt);
             if(userEmail!=null && SecurityContextHolder.getContext().getAuthentication()== null){
-                User user = userService.userDetailsService(userEmail);
+                User user = userService.loadByEmail(userEmail);
                 UserDetails userDetails = (UserDetails)user;
                 if(jwtService.isTokenValid(jwt, userDetails)){
                     SecurityContext securityContext = SecurityContextHolder.createEmptyContext();

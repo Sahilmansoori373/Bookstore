@@ -8,11 +8,14 @@ import jdk.jfr.DataAmount;
 import lombok.Data;
 import lombok.Data;
 import jakarta.persistence.*;
+import lombok.NoArgsConstructor;
+
 import java.math.BigDecimal;
 import java.util.Set;
 
 @Data
 @Entity
+@NoArgsConstructor
 public class Book {
 
         @Id

@@ -1,8 +1,8 @@
 package com.example.BookStore.config;
 
 import com.example.BookStore.entity.Role;
-import com.example.BookStore.service.UserService;
-import com.example.BookStore.serviceImpl.UserServiceImpl;
+import com.example.BookStore.serviceImpl.UserDetailsServiceImpl;
+import com.example.BookStore.serviceImpl.UserDetailsServiceImpl;
 import com.example.BookStore.serviceImpl.userDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ public class SecurityConfiguration {
 
     private final JWTAuthenticationFilter jwtAuthenticationFilter;
     @Autowired
-    private final UserServiceImpl userService;
+    private final UserDetailsServiceImpl userService;
 
     @Autowired
     private final userDetailsImpl userDetails;
@@ -37,6 +37,7 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
+                .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/api/v1/auth/**").permitAll()
                         .requestMatchers("/api/v1/admin/**").hasAuthority(Role.ADMIN.name())
@@ -54,7 +55,7 @@ public class SecurityConfiguration {
     public AuthenticationProvider authenticationProvider(){
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
         String email = userDetails.getEmail();
-        authenticationProvider.setUserDetailsService((UserDetailsService) userService.userDetailsService(email));
+        authenticationProvider.setUserDetailsService((UserDetailsService) userService.loadByEmail(email));
         authenticationProvider.setPasswordEncoder(passwordEncoder());
         return authenticationProvider;
     }

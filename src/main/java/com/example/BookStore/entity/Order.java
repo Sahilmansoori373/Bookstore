@@ -6,10 +6,13 @@ import lombok.Data;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.util.Date;
 import java.util.Set;
 @Data
 @Entity
+@NoArgsConstructor
 @Table(name = "`order`")
 public class Order {
 

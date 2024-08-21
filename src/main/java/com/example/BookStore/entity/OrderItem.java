@@ -4,10 +4,13 @@ import jakarta.persistence.Id;
 import lombok.Data;
 
 import jakarta.persistence.*;
+import lombok.NoArgsConstructor;
+
 import java.math.BigDecimal;
 
 @Entity
 @Data
+@NoArgsConstructor
 public class OrderItem {
 
         @Id

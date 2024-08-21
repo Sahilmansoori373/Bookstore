@@ -1,15 +1,18 @@
 package com.example.BookStore.serviceImpl;
 
-import org.springframework.context.annotation.Bean;
+import com.example.BookStore.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
-import java.util.List;@Service
+@Service
 public class userDetailsImpl implements UserDetails {
 
-    private String username;
+    private User user;
+
+    private String firstname;
+    private String lastname;
     private String email;
     private String password;
     private boolean isAccountNonExpired;
@@ -18,36 +21,62 @@ public class userDetailsImpl implements UserDetails {
     private boolean isEnabled;
     private Collection<? extends GrantedAuthority> authorities;
 
-    // Default constructor
-    public userDetailsImpl() {}
-
-    public String getEmail() {
-        return email;
+    public userDetailsImpl(User user) {
+        this.user = user;
     }
 
-    // Setter methods
-    public void setUsername(String username) { this.username = username; }
+    // Constructor to build from a User entity
+    public userDetailsImpl(String username, String email, String password, boolean isAccountNonExpired,
+                           boolean isAccountNonLocked, boolean isCredentialsNonExpired, boolean isEnabled,
+                           Collection<? extends GrantedAuthority> authorities) {
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.email = email;
+        this.password = password;
+        this.isAccountNonExpired = isAccountNonExpired;
+        this.isAccountNonLocked = isAccountNonLocked;
+        this.isCredentialsNonExpired = isCredentialsNonExpired;
+        this.isEnabled = isEnabled;
+        this.authorities = authorities;
+    }
+
+    // Getters and Setters for your fields
+    public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
+
+    public void setUserfirstname(String firstname) {this.firstname = firstname;}
+    public void setUserlastname(String lastname) {this.lastname = lastname;}
     public void setPassword(String password) { this.password = password; }
+    public void setAuthorities(Collection<? extends GrantedAuthority> authorities) { this.authorities = authorities; }
     public void setAccountNonExpired(boolean isAccountNonExpired) { this.isAccountNonExpired = isAccountNonExpired; }
     public void setAccountNonLocked(boolean isAccountNonLocked) { this.isAccountNonLocked = isAccountNonLocked; }
     public void setCredentialsNonExpired(boolean isCredentialsNonExpired) { this.isCredentialsNonExpired = isCredentialsNonExpired; }
     public void setEnabled(boolean isEnabled) { this.isEnabled = isEnabled; }
-    public void setAuthorities(Collection<? extends GrantedAuthority> authorities) { this.authorities = authorities; }
 
-    // Implement methods from UserDetails
+    // Implementation of UserDetails methods
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() { return authorities; }
+
     @Override
     public String getPassword() { return password; }
+
     @Override
-    public String getUsername() { return username; }
+    public String getUsername() {
+        return firstname;
+    }
+
+    public String getUserfirstname() { return firstname; }
+    public String getUserlastname() { return lastname; }
+
     @Override
     public boolean isAccountNonExpired() { return isAccountNonExpired; }
+
     @Override
     public boolean isAccountNonLocked() { return isAccountNonLocked; }
+
     @Override
     public boolean isCredentialsNonExpired() { return isCredentialsNonExpired; }
+
     @Override
     public boolean isEnabled() { return isEnabled; }
 }
